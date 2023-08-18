@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Heart Canvas Animation</title>
+</head>
+<body>
+    <canvas id="heartCanvas" width="150" height="150"></canvas>
+    <script>
+        function drawHeartOutlineAnimation() {
+            var canvas = document.getElementById('heartCanvas');
+            if (canvas.getContext) {
+                var ctx = canvas.getContext('2d');
+                var pathLength = 0; // Length of the drawn path
+                var totalPathLength = 320; // Total length of the heart's path
+                var animationSpeed = 1; // Speed of the animation
+
+                function drawFrame() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas on each frame
+
+                    // Draw a portion of the heart's path based on the pathLength
+                    ctx.beginPath();
+                    ctx.moveTo(75, 40);
+                    ctx.bezierCurveTo(75, 37, 70, 25, 50, 25);
+                    ctx.bezierCurveTo(20, 25, 20, 62.5, 20, 62.5);
+                    ctx.bezierCurveTo(20, 80, 40, 102, 75, 120);
+                    ctx.bezierCurveTo(110, 102, 130, 80, 130, 62.5);
+                    ctx.bezierCurveTo(130, 62.5, 130, 25, 100, 25);
+                    ctx.bezierCurveTo(85, 25, 75, 37, 75, 40);
+
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = "red";
+                    ctx.setLineDash([]); // Reset any dashed lines from previous animation frames
+                    ctx.lineDashOffset = 0;
+
+                    // Calculate the length to be drawn on this frame
+                    var lengthToDraw = totalPathLength * (pathLength / totalPathLength);
+
+                    // Set line dash to simulate drawing effect
+                    ctx.setLineDash([lengthToDraw, totalPathLength]);
+
+                    ctx.stroke();
+
+                    pathLength += animationSpeed;
+
+                    if (pathLength <= totalPathLength) {
+                        requestAnimationFrame(drawFrame); // Continue the animation
+                    } else {
+                        // Draw the arrow after the animation is complete
+                        ctx.beginPath();
+                        ctx.moveTo(70, 15);
+                        ctx.lineTo(75, 5);
+                        ctx.lineTo(80, 15);
+                        ctx.stroke();
+                    }
+                }
+
+                requestAnimationFrame(drawFrame); // Start the animation
+            }
+        }
+
+        drawHeartOutlineAnimation();
+    </script>
+</body>
+</html>
+
